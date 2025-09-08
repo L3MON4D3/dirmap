@@ -1,0 +1,12 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "dirmap"
+version = "0.1"
+# can probably use lower version of both.
+dependencies = ["python-fuse>1.0.9", "python-slugify>8.0"]
+
+[project.scripts]
+opus-fs = "dirmap.opus_fs:main"
