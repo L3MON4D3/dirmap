@@ -269,10 +269,12 @@ class FuseImpl(Fuse):
                         self.data.extend(b)
                     return self.data[offset:offset+size]
 
-        def close(self) :
+        def release(self) :
             if self.mode == MappedFileType.FILE :
                 self.f.close()
-        
+            elif self.mode == MappedFileType.PIPE :
+                self.stdout.close()
+
     def new_file(self, path, flags, *mode) :
         return self.FuseFile(self._fs_map.file_map, path, flags, *mode)
 
