@@ -55,7 +55,7 @@ def sizemap(de: os.DirEntry) :
     return 0
 
 def main() :
-    filemap = FileMap(extension_map = extmap, data_map = datamap)
+    filemap = FileMap(extension_map = extmap, data_map = datamap, size_map = sizemap)
 
     fstree = MappedFSTree(sys.argv[1], file_map = filemap, name_map = namemap)
     fstree.init_fuse(sys.argv[2])
