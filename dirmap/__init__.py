@@ -60,7 +60,7 @@ def map_fname(name: str, name_map: NameMap, ext_map: ExtensionMap) :
         fname = name[:last_dot_idx]
         ext = name[last_dot_idx+1:]
         mapped_name = name_map(fname) + "." + ext_map(ext)
-        print(f"name is {name}, parsed as {fname}:{ext}, mapped to {mapped_name}")
+        # print(f"name is {name}, parsed as {fname}:{ext}, mapped to {mapped_name}")
         return mapped_name
 
 def map_dirname(name: str, name_map: NameMap) :
@@ -253,7 +253,7 @@ class FuseImpl(Fuse):
                     return buf
                 case MappedFileType.FILE :
                     self.f.seek(offset)
-                    print(f"seeked to {offset}")
+                    #print(f"seeked to {offset}")
                     return self.f.read(size)
                 case MappedFileType.PIPE :
                     # once pipe is exhausted, just return data.
@@ -265,7 +265,7 @@ class FuseImpl(Fuse):
                         if b == b"" :
                             self.read_done = True
                             break
-                        print(f"read {len(b)} bytes from stream!")
+                        # print(f"read {len(b)} bytes from stream!")
                         self.data.extend(b)
                     return self.data[offset:offset+size]
 
