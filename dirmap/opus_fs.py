@@ -10,7 +10,7 @@ def extmap(ext: str) :
 def namemap(name: str) :
     # leave 6 characters for the extension, should suffice :)
     # (max of 256 chars on some old filesystems.)
-    return slugify(
+    slug = slugify(
         name,
         replacements=[
             ['Ü', 'UE'],
@@ -21,6 +21,7 @@ def namemap(name: str) :
             ['ö', 'oe'],
         ],
         max_length=250)
+    return slug if slug != "" else "-"
 
 def datamap(path) :
     if path[-4:] == "flac" :
