@@ -50,9 +50,9 @@ def datamap(path) :
         return open(path, "rb")
 
 def sizemap(de: os.DirEntry) :
-    # safe upper bound for files converted from flac to opus, and also for
-    # unconverted files.
-    return de.stat(follow_symlinks=True).st_size
+    # we don't always know filesize beforehand, and 0 is at least uniformly
+    # wrong :D
+    return 0
 
 def main() :
     filemap = FileMap(extension_map = extmap, data_map = datamap)
