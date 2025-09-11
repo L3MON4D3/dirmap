@@ -22,6 +22,7 @@
           # I want to look into this.
           dontCheckRuntimeDeps = true;
           dependencies = pylibs pkgs.python3Packages;
+          propagatedBuildInputs = [ pkgs.ffmpeg ];
         };
         devShell = pkgs.mkShell {
           packages = [
