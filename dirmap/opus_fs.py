@@ -50,9 +50,9 @@ def datamap(path) :
         return open(path, "rb")
 
 def sizemap(de: os.DirEntry) :
-    # we don't always know filesize beforehand, and 0 is at least uniformly
-    # wrong :D
-    return 0
+    # overestimate filesize. opus will have much lower filesize than flac, and
+    # the cuesheet modification will probably add like 10 bytes.
+    return de.stat(follow_symlinks=True).st_size + 1000
 
 def main() :
     filemap = FileMap(extension_map = extmap, data_map = datamap, size_map = sizemap)
