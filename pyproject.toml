@@ -10,3 +10,4 @@ dependencies = ["python-fuse>1.0.9", "python-slugify>8.0"]
 
 [project.scripts]
 opus-fs = "dirmap.opus_fs:main"
+playlist-fs = "dirmap.playlist_reversemap:main"
