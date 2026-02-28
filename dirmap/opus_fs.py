@@ -1,5 +1,6 @@
-from dirmap import MappedFSTree, FileMap, map_fname
+from dirmap import MappedFSTree, FileMap, map_fname, map_relpath
 import subprocess, os, re, sys
+from pprint import pp
 from slugify import slugify
 
 def extmap(ext: str) :
@@ -7,7 +8,7 @@ def extmap(ext: str) :
         return ext
     return "opus"
 
-def namemap(name: str) :
+def namemap(name: str, allow_empty = False) :
     # leave 6 characters for the extension, should suffice :)
     # (max of 256 chars on some old filesystems.)
     slug = slugify(
@@ -21,7 +22,7 @@ def namemap(name: str) :
             ['ö', 'oe'],
         ],
         max_length=250)
-    return slug if slug != "" else "-"
+    return slug if slug != "" or allow_empty else "-"
 
 def datamap(path) :
     if path[-4:] == "flac" :
@@ -46,6 +47,13 @@ def datamap(path) :
                 text = text[0:match.start(FNAME_GROUPIDX)] + mapped_fname + text[match.end(FNAME_GROUPIDX):]
             
             return text.encode("utf-8")
+    elif path[-3:] == "m3u" :
+        with open(path, "r") as f:
+            lines = f.read().strip(" \n").split("\n")
+            mapped_lines = map(
+                lambda line: map_relpath(line, name_map=namemap, ext_map=extmap) if line[0] != "#" else line,
+                lines )
+            return "\n".join(mapped_lines).encode("utf-8")
     else :
         return open(path, "rb")
 

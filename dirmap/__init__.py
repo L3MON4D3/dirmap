@@ -6,6 +6,7 @@ from collections.abc import Callable
 from pprint import pp
 from copy import deepcopy
 from enum import Enum
+from typing import Protocol
 
 import logging
 logger = logging.getLogger(__name__)
@@ -33,8 +34,10 @@ def default_datamap(path: str) :
         data = f.read()
         return data
 
+class NameMap(Protocol) :
+    def __call__(self, name: str, allow_empty: bool = False) -> str :
+        ...
 # map file-paths/direntries.
-NameMap = Callable[[str], str]
 def default_namemap(direntry: str) :
     return direntry
 
@@ -55,7 +58,7 @@ def map_fname(name: str, name_map: NameMap, ext_map: ExtensionMap) :
     last_dot_idx = name.rfind(".")
     if last_dot_idx == 0 :
         # keep hidden files hidden.
-        return "." + name_map(name[last_dot_idx+1:])
+        return "." + name_map(name[last_dot_idx+1:], allow_empty = True)
     else :
         fname = name[:last_dot_idx]
         ext = name[last_dot_idx+1:]
@@ -67,9 +70,17 @@ def map_dirname(name: str, name_map: NameMap) :
     last_dot_idx = name.rfind(".")
     if last_dot_idx == 0 :
         # keep hidden directories hidden.
-        return "." + name_map(name[last_dot_idx+1:])
+        return "." + name_map(name[last_dot_idx+1:], allow_empty=True)
     else :
         return name_map(name)
+
+def map_relpath(real_path: str, name_map: NameMap, ext_map: ExtensionMap) :
+    path_components = real_path.split("/")
+    new_path = (
+        [map_dirname(comp, name_map) for comp in path_components[0:-1]] +
+        [map_fname(path_components[-1], name_map, ext_map)]
+    )
+    return "/".join(new_path)
 
 # represents a directory.
 class MappedDir :
