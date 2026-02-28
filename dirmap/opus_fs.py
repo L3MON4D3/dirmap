@@ -27,7 +27,11 @@ def namemap(name: str, allow_empty = False) :
 def datamap(path) :
     if path[-4:] == "flac" :
         proc = subprocess.Popen(
-            ["ffmpeg", "-i", path, "-b:a", "128k", "-map_metadata", "0", "-f", "opus", "pipe:1"],
+            [
+                "opusenc", path,
+                "--bitrate", "128",
+                "-"
+            ],
             stdin=None, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
         return proc.stdout
     elif path[-3:] == "cue" :

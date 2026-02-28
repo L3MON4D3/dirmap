@@ -22,7 +22,7 @@
           # I want to look into this.
           dontCheckRuntimeDeps = true;
           dependencies = pylibs pkgs.python3Packages;
-          propagatedBuildInputs = [ pkgs.ffmpeg ];
+          propagatedBuildInputs = [ pkgs.opusTools ];
         };
         devShell = pkgs.mkShell {
           packages = [
